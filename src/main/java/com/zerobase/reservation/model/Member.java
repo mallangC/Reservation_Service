@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.envers.AuditOverride;
 
-import java.util.List;
-
 @AllArgsConstructor
 @Builder
 @Getter

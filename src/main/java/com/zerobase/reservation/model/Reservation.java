@@ -1,11 +1,9 @@
 package com.zerobase.reservation.model;
 
-import com.zerobase.reservation.domain.form.ReservationForm;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Builder

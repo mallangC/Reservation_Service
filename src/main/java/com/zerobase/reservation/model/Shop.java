@@ -1,12 +1,8 @@
 package com.zerobase.reservation.model;
 
-import com.zerobase.reservation.domain.form.ShopForm;
-import com.zerobase.reservation.repository.ShopRepository;
 import jakarta.persistence.*;
 import lombok.*;
 import org.checkerframework.common.aliasing.qual.Unique;
-
-import java.util.List;
 
 @Entity
 @Getter
