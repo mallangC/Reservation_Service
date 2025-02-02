@@ -1,0 +1,21 @@
+### 회원가입
+POST http://localhost:8080/join
+Content-Type: application/json
+
+{
+  "email": "test10@gmail.com",
+  "password": "1234",
+  "name": "Linda",
+  "phone": "01034543472",
+  "role": "ROLE_MANAGER"
+}
+
+### 로그인
+POST http://localhost:8080/login
+Content-Type: application/json
+
+{
+  "email": "test@gmail.com",
+  "password": "1234"
+}
+

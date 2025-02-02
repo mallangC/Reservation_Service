@@ -1,0 +1,52 @@
+### 예약 추가
+POST http://localhost:8080/reservation
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIiwiaWF0IjoxNzM4NDAxMjA3LCJleHAiOjE3Mzg5MDEyMDd9.Sd4xnrtI_0KbI6ubPVhId9xzaGILWwm-PRu0nkaebek
+
+{
+  "shopName": "백다방",
+  "memberId": 1,
+  "reservationDt": "2025-02-05 18"
+}
+
+### 예약 확인 (점장) -> 시간별로 정렬
+GET http://localhost:8080/reservation/shop?name=백다방
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QxMEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9NQU5BR0VSIiwiaWF0IjoxNzM4NDAxOTA5LCJleHAiOjE3Mzg5MDE5MDl9.4JdtZKfjUAABuB26Mez8CCrTUVWf969Wzs6IIO4iHP0
+
+
+
+### 예약 확인 (회원)
+GET http://localhost:8080/reservation/member?id=1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIiwiaWF0IjoxNzM4NDAxMjA3LCJleHAiOjE3Mzg5MDEyMDd9.Sd4xnrtI_0KbI6ubPVhId9xzaGILWwm-PRu0nkaebek
+
+
+
+### 예약 삭제
+DELETE http://localhost:8080/reservation?id=1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIiwiaWF0IjoxNzM4NDAxMjA3LCJleHAiOjE3Mzg5MDEyMDd9.Sd4xnrtI_0KbI6ubPVhId9xzaGILWwm-PRu0nkaebek
+
+
+### 예약 승인
+PUT http://localhost:8080/reservation/shop/approve
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QxMEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9NQU5BR0VSIiwiaWF0IjoxNzM4NDAxOTA5LCJleHAiOjE3Mzg5MDE5MDl9.4JdtZKfjUAABuB26Mez8CCrTUVWf969Wzs6IIO4iHP0
+
+{
+  "shopName": "백다방",
+  "memberPhone": "01034543442",
+  "isApprove": "true"
+}
+
+### 예약 도착 처리
+PUT http://localhost:8080/reservation/shop/arrive
+Content-Type: application/json
+
+{
+  "shopName": "백다방",
+  "memberPhone": "01034543442",
+  "isApprove": "true"
+}
+

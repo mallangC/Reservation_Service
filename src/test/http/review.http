@@ -1,0 +1,40 @@
+### 리뷰 작성
+POST http://localhost:8080/review
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIiwiaWF0IjoxNzM4NDE1MjgzLCJleHAiOjE3Mzg5MTUyODN9.0UIyg8OL2ZU3jTUrgOfyVlghnvzYxg9a9IRLBO8QQ14
+
+{
+  "shopName": "백다방",
+  "memberId": 1,
+  "contents": "너무 맛있었어요! 커피 맛집!",
+  "rating": 5,
+  "reservedDt": "2025-02-01 20"
+}
+
+### 리뷰 확인(점장)
+GET http://localhost:8080/review/shop?name=백다방
+Content-Type: application/json
+
+
+### 리뷰 확인(회원)
+GET http://localhost:8080/review/member?id=1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIiwiaWF0IjoxNzM4NDE1MjgzLCJleHAiOjE3Mzg5MTUyODN9.0UIyg8OL2ZU3jTUrgOfyVlghnvzYxg9a9IRLBO8QQ14
+
+
+### 리뷰 수정(회원)
+PUT http://localhost:8080/review
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIiwiaWF0IjoxNzM4NDE1MjgzLCJleHAiOjE3Mzg5MTUyODN9.0UIyg8OL2ZU3jTUrgOfyVlghnvzYxg9a9IRLBO8QQ14
+
+{
+  "id": 1,
+  "memberId": 1,
+  "contents": "JMT임 라떼를 추천합니다!"
+}
+
+### 리뷰 삭제 (리뷰 숨김 > 재작성 불가능)
+DELETE http://localhost:8080/review?id=1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIiwiaWF0IjoxNzM4NDE1MjgzLCJleHAiOjE3Mzg5MTUyODN9.0UIyg8OL2ZU3jTUrgOfyVlghnvzYxg9a9IRLBO8QQ14
+

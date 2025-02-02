@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zerobase.reservation.controller.mapper.ShopMapper">
+<!--    <select id="selectListDistance" parameterType="map" resultType="String">-->
+    <select id="selectListDistance" parameterType="com.zerobase.reservation.domain.form.MyLocationForm" resultType="String">
+        SELECT name,
+               (6371 * acos(cos(CAST(lat AS FLOAT) * 3.141592653589793 / 180.0) * cos(#{lat} * 3.141592653589793 / 180.0)
+                                * cos((#{lng} * 3.141592653589793 / 180.0) - (CAST(lng AS FLOAT) * 3.141592653589793 / 180.0)) + sin(CAST(lat AS FLOAT) * 3.141592653589793 / 180.0)
+                                * sin(#{lat} * 3.141592653589793 / 180.0))) distance
+        FROM reservation_db.shop
+        order by distance
+        limit 10
+    </select>
+
+    <select id="selectAll" resultType="com.zerobase.reservation.model.Shop">
+        select *
+        from reservation_db.shop
+    </select>
+</mapper>

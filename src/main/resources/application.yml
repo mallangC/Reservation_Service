@@ -1,0 +1,27 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  application:
+    name: reservation
+
+  datasource:
+    url: jdbc:mariadb://localhost:3306/reservation_db
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: secret
+
+  jwt:
+    secret: sdjhfwrifwefhsjofsndmvbcxmvbifhwekfkssfdfjkhflasjhfdksdjhfskdsdfkjhasdswhdfccv
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+mybatis:
+  mapper-locations: classpath:mybatis/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
