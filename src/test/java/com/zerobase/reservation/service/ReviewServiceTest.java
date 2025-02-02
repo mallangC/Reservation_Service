@@ -41,6 +41,8 @@ class ReviewServiceTest {
   @InjectMocks
   private ReviewService reviewService;
 
+  public String reservationTimeString = "2025-01-25 17";
+
   public LocalDateTime reservationTime =
           LocalDateTime.of(
                   2025,1,25, 17,0);
@@ -91,12 +93,12 @@ class ReviewServiceTest {
     given(memberRepository.findById(anyLong()))
             .willReturn(Optional.of(member));
 
-    given(reservationRepository.findByMemberIdAndShopName(anyLong(), anyString()))
+    given(reservationRepository.findFirstByMemberAndShopAndReservationDt(any(), any(), any()))
             .willReturn(Optional.of(Reservation.builder()
                     .id(1L)
                     .shop(shop)
                     .member(member)
-                    .reservationDt(reservationTime)
+                    .reservationDt(reservationTimeString)
                     .isApproved(true)
                     .isArrived(true)
                     .build()));
@@ -108,7 +110,7 @@ class ReviewServiceTest {
                     .member(member)
                     .isExist(true)
                     .rating(5)
-                    .reservedDt(reservationTime)
+                    .reservedDt(reservationTimeString)
                     .contents("넘 많있엉 커피")
                     .build());
 
@@ -210,7 +212,7 @@ class ReviewServiceTest {
     given(memberRepository.findById(anyLong()))
             .willReturn(Optional.of(member));
 
-    given(reservationRepository.findByMemberIdAndShopName(anyLong(), anyString()))
+    given(reservationRepository.findFirstByMemberAndShopAndReservationDt(any(), any(), any()))
             .willReturn(Optional.empty());
 
     String reservedDt = String.format("%d-%02d-%02d %d",
@@ -245,12 +247,12 @@ class ReviewServiceTest {
     given(memberRepository.findById(anyLong()))
             .willReturn(Optional.of(member));
 
-    given(reservationRepository.findByMemberIdAndShopName(anyLong(), anyString()))
+    given(reservationRepository.findFirstByMemberAndShopAndReservationDt(any(), any(), any()))
             .willReturn(Optional.of(Reservation.builder()
                     .id(1L)
                     .shop(shop)
                     .member(member)
-                    .reservationDt(reservationTime)
+                    .reservationDt(reservationTimeString)
                     .isApproved(false)
                     .isArrived(true)
                     .build()));
@@ -287,12 +289,12 @@ class ReviewServiceTest {
     given(memberRepository.findById(anyLong()))
             .willReturn(Optional.of(member));
 
-    given(reservationRepository.findByMemberIdAndShopName(anyLong(), anyString()))
+    given(reservationRepository.findFirstByMemberAndShopAndReservationDt(any(), any(), any()))
             .willReturn(Optional.of(Reservation.builder()
                     .id(1L)
                     .shop(shop)
                     .member(member)
-                    .reservationDt(reservationTime)
+                    .reservationDt(reservationTimeString)
                     .isApproved(true)
                     .isArrived(false)
                     .build()));
@@ -329,12 +331,12 @@ class ReviewServiceTest {
     given(memberRepository.findById(anyLong()))
             .willReturn(Optional.of(member));
 
-    given(reservationRepository.findByMemberIdAndShopName(anyLong(), anyString()))
+    given(reservationRepository.findFirstByMemberAndShopAndReservationDt(any(), any(), any()))
             .willReturn(Optional.of(Reservation.builder()
                     .id(1L)
                     .shop(shop)
                     .member(member)
-                    .reservationDt(reservationTime)
+                    .reservationDt(reservationTimeString)
                     .isApproved(true)
                     .isArrived(true)
                     .build()));
@@ -371,12 +373,12 @@ class ReviewServiceTest {
     given(memberRepository.findById(anyLong()))
             .willReturn(Optional.of(member));
 
-    given(reservationRepository.findByMemberIdAndShopName(anyLong(), anyString()))
+    given(reservationRepository.findFirstByMemberAndShopAndReservationDt(any(), any(), any()))
             .willReturn(Optional.of(Reservation.builder()
                     .id(1L)
                     .shop(shop)
                     .member(member)
-                    .reservationDt(reservationTime)
+                    .reservationDt(reservationTimeString)
                     .isApproved(true)
                     .isArrived(true)
                     .build()));
@@ -388,7 +390,7 @@ class ReviewServiceTest {
                     .member(member)
                     .isExist(true)
                     .rating(5)
-                    .reservedDt(reservationTime)
+                    .reservedDt(reservationTimeString)
                     .contents("넘 많있엉 커피")
                     .build()));
 
@@ -424,12 +426,12 @@ class ReviewServiceTest {
     given(memberRepository.findById(anyLong()))
             .willReturn(Optional.of(member));
 
-    given(reservationRepository.findByMemberIdAndShopName(anyLong(), anyString()))
+    given(reservationRepository.findFirstByMemberAndShopAndReservationDt(any(), any(), any()))
             .willReturn(Optional.of(Reservation.builder()
                     .id(1L)
                     .shop(shop)
                     .member(member)
-                    .reservationDt(reservationTime)
+                    .reservationDt(reservationTimeString)
                     .isApproved(true)
                     .isArrived(true)
                     .build()));
@@ -441,7 +443,7 @@ class ReviewServiceTest {
                     .member(member)
                     .isExist(false)
                     .rating(5)
-                    .reservedDt(reservationTime)
+                    .reservedDt(reservationTimeString)
                     .contents("넘 많있엉 커피")
                     .build()));
 
@@ -480,7 +482,7 @@ class ReviewServiceTest {
                                     .member(member)
                                     .contents("good coffee!")
                                     .isExist(true)
-                                    .reservedDt(LocalDateTime.of(2025,1,10,15,0))
+                                    .reservedDt("2025-01-10 15")
                                     .rating(5)
                                     .build(),
                             Review.builder()
@@ -491,7 +493,7 @@ class ReviewServiceTest {
                                             .build())
                                     .contents("good coffee!~!")
                                     .isExist(true)
-                                    .reservedDt(LocalDateTime.of(2025,1,10,16,0))
+                                    .reservedDt("2025-01-10 16")
                                     .rating(5)
                                     .build())
                     );
@@ -536,7 +538,7 @@ class ReviewServiceTest {
                                     .build())
                             .contents("good ramen!~!")
                             .isExist(true)
-                            .reservedDt(LocalDateTime.of(2025,1,8,16,0))
+                            .reservedDt("2025-01-10 16")
                             .rating(5)
                             .build())
             );
@@ -581,7 +583,7 @@ class ReviewServiceTest {
                     .shop(shop)
                     .rating(5)
                     .isExist(true)
-                    .reservedDt(reservationTime)
+                    .reservedDt(reservationTimeString)
                     .contents("JMT")
                     .member(member)
                     .build()));

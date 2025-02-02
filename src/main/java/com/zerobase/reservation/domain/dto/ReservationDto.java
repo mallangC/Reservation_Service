@@ -12,7 +12,7 @@ public class ReservationDto {
   private Long id;
   private String shop;
   private Long memberId;
-  private LocalDateTime reservationDt;
+  private String reservationDt;
   private Boolean isApproved;
   private Boolean isArrived;
 

@@ -47,9 +47,7 @@ class ReservationServiceTest {
   @InjectMocks
   private ReservationService reservationService;
 
-  public LocalDateTime reservationTime =
-          LocalDateTime.of(
-                  2025,1,25, 17,0);
+  public String reservationTime = "2025-01-25 17";
 
   public LocalDateTime goodArriveTime = LocalDateTime.of(
           2025,1,25, 16,55);
@@ -57,6 +55,8 @@ class ReservationServiceTest {
           2025,1,24, 16,55);
   public LocalDateTime earlyArriveTime = LocalDateTime.of(
           2025,1,25, 15,0);
+
+  public String goodReserveTimeString = "2025-01-10 10";
 
   public LocalDateTime goodReserveTime = LocalDateTime.of(
           2025,1,10, 10,0);
@@ -431,10 +431,11 @@ class ReservationServiceTest {
                             .role("ROLE_MEMBER")
                             .build())
                     .isArrived(false)
-                    .reservationDt(goodReserveTime)
+                    .reservationDt(goodReserveTimeString)
                     .build());
 
-    given(reservationRepository.existsByMemberIdAndShopName(anyLong(), anyString()))
+
+    given(reservationRepository.existsByMemberAndShopAndReservationDtStartingWith(any(), any(), anyString()))
             .willReturn(false);
 
     //when
@@ -601,7 +602,7 @@ class ReservationServiceTest {
                     .role("ROLE_MEMBER")
                     .build()));
 
-    given(reservationRepository.existsByMemberIdAndShopName(anyLong(), anyString()))
+    given(reservationRepository.existsByMemberAndShopAndReservationDtStartingWith(any(), any(), anyString()))
             .willReturn(true);
 
     //when
@@ -614,7 +615,7 @@ class ReservationServiceTest {
     try {
       ReservationDto reservationDto = reservationService.addReservation(form, goodReserveTime);
     }catch (CustomException e){
-      assertEquals(ALREADY_RESERVED, e.getErrorCode());
+      assertEquals(ALREADY_RESERVED_TODAY, e.getErrorCode());
     }
   }
 
@@ -659,7 +660,7 @@ class ReservationServiceTest {
                     .role("ROLE_MEMBER")
                     .build()));
 
-    given(reservationRepository.existsByMemberIdAndShopName(anyLong(), anyString()))
+    given(reservationRepository.existsByMemberAndShopAndReservationDtStartingWith(any(), any(), anyString()))
             .willReturn(false);
 
     ReservationForm form = ReservationForm.builder()
@@ -674,9 +675,6 @@ class ReservationServiceTest {
       assertEquals(NOT_DAY_SHOP_OPEN, e.getErrorCode());
     }
   }
-
-
-
 
 
 }

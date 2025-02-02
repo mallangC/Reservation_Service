@@ -1,12 +1,12 @@
 ### 예약 추가
 POST http://localhost:8080/reservation
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIiwiaWF0IjoxNzM4NDAxMjA3LCJleHAiOjE3Mzg5MDEyMDd9.Sd4xnrtI_0KbI6ubPVhId9xzaGILWwm-PRu0nkaebek
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIiwiaWF0IjoxNzM4NTEwODM4LCJleHAiOjE3MzkwMTA4Mzh9.u_9ToDQooefurPWwkXtm9XCIHJjFiFRopKCxJ5Dk_Yc
 
 {
   "shopName": "백다방",
   "memberId": 1,
-  "reservationDt": "2025-02-05 18"
+  "reservationDt": "2025-02-05 12"
 }
 
 ### 예약 확인 (점장) -> 시간별로 정렬

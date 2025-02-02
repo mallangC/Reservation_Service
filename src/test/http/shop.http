@@ -1,7 +1,7 @@
 ### 가게 등록
 POST http://localhost:8080/shop
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QxMEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9NQU5BR0VSIiwiaWF0IjoxNzM4Mzk5NTY5LCJleHAiOjE3Mzg4OTk1Njl9.pyRRs2Ou7s4LPobcx0FC6eWSyU76iC-cCeRUeTmeE7U
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QxMEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9NQU5BR0VSIiwiaWF0IjoxNzM4NTEwNzUyLCJleHAiOjE3MzkwMTA3NTJ9.SKzbY3OyOPxKScFVoid9JK387p04qj5izQ0XU9aiRyA
 
 {
   "name": "백우동",
@@ -25,9 +25,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QxMEBnbWFpbC5jb20iL
 }
 
 ### 가게 삭제
-DELETE http://localhost:8080/shop?name=백우동
+DELETE http://localhost:8080/shop?name=백다방
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QxMEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9NQU5BR0VSIiwiaWF0IjoxNzM4Mzk5NTY5LCJleHAiOjE3Mzg4OTk1Njl9.pyRRs2Ou7s4LPobcx0FC6eWSyU76iC-cCeRUeTmeE7U
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QxMEBnbWFpbC5jb20iLCJyb2xlIjoiUk9MRV9NQU5BR0VSIiwiaWF0IjoxNzM4NTEwNzUyLCJleHAiOjE3MzkwMTA3NTJ9.SKzbY3OyOPxKScFVoid9JK387p04qj5izQ0XU9aiRyA
 
 ### 가게 호출
 GET http://localhost:8080/shop/detail?name=백우동

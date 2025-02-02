@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -35,6 +36,8 @@ public class ReservationService {
   //예약할 매장 이름,예약하는 회원 아이디, 예약할 시간
   public ReservationDto addReservation(ReservationForm form, LocalDateTime now) {
 
+    String formDt = form.getReservationDt();
+
     //매장, 회원 존재여부
     Shop shopToReserve = shopRepository.findByName(form.getShopName())
             .orElseThrow(()-> new CustomException(NOT_FOUND_SHOP));
@@ -43,7 +46,7 @@ public class ReservationService {
 
     //예약날이 두달내에 있는지
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH");
-    LocalDateTime reservationDt = LocalDateTime.parse(form.getReservationDt(), formatter);
+    LocalDateTime reservationDt = LocalDateTime.parse(formDt, formatter);
 
     if (!reservationDt.isBefore(now.plusMonths(2)) || reservationDt.isBefore(now)){
       throw new CustomException(RESERVATION_WITHIN_TWO_MONTHS);
@@ -56,13 +59,15 @@ public class ReservationService {
       throw new CustomException(NOT_TIME_SHOP_OPEN);
     }
 
+    String StartingWithDt = formDt.split(" ")[0];
+
     //이미 예약이 있는지 확인
     boolean alreadyReserved =
-            reservationRepository.existsByMemberIdAndShopName(
-                    form.getMemberId(), form.getShopName());
+            reservationRepository.existsByMemberAndShopAndReservationDtStartingWith(
+                    memberReserve, shopToReserve, StartingWithDt);
 
     if (alreadyReserved){
-      throw new CustomException(ALREADY_RESERVED);
+      throw new CustomException(ALREADY_RESERVED_TODAY);
     }
 
     List<String> shopWorkingDays = WorkingDaysDto.from(shopToReserve.getWorkingDays());
@@ -76,7 +81,7 @@ public class ReservationService {
             reservationRepository.save(Reservation.builder()
             .shop(shopToReserve)
             .member(memberReserve)
-            .reservationDt(reservationDt)
+            .reservationDt(formDt)
             .isArrived(false)
             .build()));
   }
@@ -117,7 +122,8 @@ public class ReservationService {
     if (reservation.getIsApproved() == null || !reservation.getIsApproved()){
       throw new CustomException(NOT_APPROVED_RESERVATION);
     }
-    LocalDateTime reservationDt = reservation.getReservationDt();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH");
+    LocalDateTime reservationDt = LocalDateTime.parse(reservation.getReservationDt(), formatter);
 
     //예약 날짜가 맞는지 확인
     if (!now.getMonth().equals(reservationDt.getMonth()) ||
@@ -126,8 +132,8 @@ public class ReservationService {
     }
 
     //예약 시간 10분전에 도착했는지 확인
-    if (now.isAfter(reservation.getReservationDt()) ||
-    now.isBefore(reservation.getReservationDt().minusMinutes(10))){
+    if (now.isAfter(reservationDt) ||
+    now.isBefore(reservationDt.minusMinutes(10))){
       throw new CustomException(RESERVATION_EARLY_OR_PASSED);
     }
 

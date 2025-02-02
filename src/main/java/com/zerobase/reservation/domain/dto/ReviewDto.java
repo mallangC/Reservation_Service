@@ -14,7 +14,7 @@ public class ReviewDto {
   private Long memberId;
   private String contents;
   private Boolean isExist;
-  private LocalDateTime reservedDt;
+  private String reservedDt;
   private Integer rating;
 
   public static ReviewDto from(Review review) {

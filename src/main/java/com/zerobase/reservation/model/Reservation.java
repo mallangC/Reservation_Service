@@ -19,7 +19,7 @@ public class Reservation {
   private Shop shop;
   @ManyToOne
   private Member member;
-  private LocalDateTime reservationDt;
+  private String reservationDt;
   private Boolean isApproved;
   private Boolean isArrived;
 

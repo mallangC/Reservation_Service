@@ -21,7 +21,7 @@ public class Review {
   private Member member;
   private String contents;
   private Boolean isExist;
-  private LocalDateTime reservedDt;
+  private String reservedDt;
   private Integer rating;
 
 }

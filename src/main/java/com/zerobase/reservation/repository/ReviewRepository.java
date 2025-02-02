@@ -19,5 +19,5 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
   List<Review> findAllByShop(Shop shop);
 
-  Optional<Review> findAllByShopAndReservedDt(Shop shop, LocalDateTime reservedDt);
+  Optional<Review> findAllByShopAndReservedDt(Shop shop, String reservedDt);
 }

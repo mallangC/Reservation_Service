@@ -6,9 +6,9 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwic
 {
   "shopName": "백다방",
   "memberId": 1,
-  "contents": "너무 맛있었어요! 커피 맛집!",
+  "contents": "너무 맛있었어요!! 대박쓰",
   "rating": 5,
-  "reservedDt": "2025-02-01 20"
+  "reservedDt": "2025-02-02 15"
 }
 
 ### 리뷰 확인(점장)
@@ -34,7 +34,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwic
 }
 
 ### 리뷰 삭제 (리뷰 숨김 > 재작성 불가능)
-DELETE http://localhost:8080/review?id=1
+DELETE http://localhost:8080/review?id=3
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIiwiaWF0IjoxNzM4NDE1MjgzLCJleHAiOjE3Mzg5MTUyODN9.0UIyg8OL2ZU3jTUrgOfyVlghnvzYxg9a9IRLBO8QQ14
 

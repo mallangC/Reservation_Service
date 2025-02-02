@@ -15,7 +15,8 @@ public enum ErrorCode {
   TOKEN_EXPIRED(HttpStatus.BAD_REQUEST, "토근 유효기간이 만료되었습니다."),
 
 
-  NOT_FOUND_SHOP(HttpStatus.BAD_REQUEST, "매장을 찾을 수 업습니다."),
+  NOT_FOUND_SHOP(HttpStatus.BAD_REQUEST, "매장을 찾을 수 없습니다."),
+  NOT_RIGHT_AUTH(HttpStatus.BAD_REQUEST, "점장 권한을 가진 회원만 매장을 등록할 수 있습니다."),
   ALREADY_REGISTERED_SHOP(HttpStatus.BAD_REQUEST, "이미 등록된 매장입니다."),
   ALREADY_GIVE_STAR(HttpStatus.BAD_REQUEST, "이미 별점을 줬습니다."),
   NOT_GIVE_STAR(HttpStatus.BAD_REQUEST, "별점을 주지 않았습니다."),
@@ -27,7 +28,7 @@ public enum ErrorCode {
   RESERVATION_WITHIN_TWO_MONTHS(HttpStatus.BAD_REQUEST, "두 달 후까지만 예약할 수 있습니다."),
   NOT_TIME_SHOP_OPEN(HttpStatus.BAD_REQUEST, "매장이 열려있는 시간이 아닙니다."),
   NOT_DAY_SHOP_OPEN(HttpStatus.BAD_REQUEST, "매장이 열려있는 요일이 아닙니다."),
-  ALREADY_RESERVED(HttpStatus.BAD_REQUEST, "이미 예약이 되어있습니다."),
+  ALREADY_RESERVED_TODAY(HttpStatus.BAD_REQUEST, "하루에 예약은 한번만 가능합니다."),
   NOT_FOUND_RESERVATION_TO_PHONE(HttpStatus.BAD_REQUEST, "번호로 등록된 예약이 없습니다."),
   RESERVATION_NOT_TODAY(HttpStatus.BAD_REQUEST, "예약 날짜는 오늘이 아닙니다."),
   RESERVATION_EARLY_OR_PASSED(HttpStatus.BAD_REQUEST, "예약 시간 10분 전이 아니거나, 예약시간이 지났습니다."),

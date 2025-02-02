@@ -41,6 +41,9 @@ public class ReviewService {
   //리뷰 작성
   @Transactional
   public ReviewDto addReview(ReviewForm form, LocalDateTime now) {
+
+    String formDt = form.getReservedDt();
+
     //매장이 존재하는지
     Shop shop = shopRepository.findByName(form.getShopName())
             .orElseThrow(()->new CustomException(NOT_FOUND_SHOP));
@@ -49,11 +52,15 @@ public class ReviewService {
     Member member = memberRepository.findById(form.getMemberId())
             .orElseThrow(()->new CustomException(NOT_FOUND_MEMBER));
 
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH");
+    LocalDateTime reservationDt = LocalDateTime.parse(formDt, formatter);
+
     //예약한 내역이 있는지
     Reservation reservation =
-            reservationRepository.findByMemberIdAndShopName(
-                            member.getId(),
-                            shop.getName())
+            reservationRepository.findFirstByMemberAndShopAndReservationDt(
+                            member,
+                            shop,
+                            formDt)
                     .orElseThrow(()-> new CustomException(NOT_FOUND_RESERVATION));
 
     //예약 승인을 받은 회원인지
@@ -67,7 +74,7 @@ public class ReviewService {
     }
 
     //예약시간이 지금시간보다 이전인지(매장을 이용하고 리뷰쓰는건지)
-    if (reservation.getReservationDt().isAfter(now)){
+    if (reservationDt.isAfter(now)){
       throw new CustomException(WRITE_AFTER_RESERVE_TIME);
     }
 
@@ -90,12 +97,13 @@ public class ReviewService {
                     .member(member)
                     .contents(form.getContents())
                     .isExist(true)
-                    .reservedDt(LocalDateTime.parse(form.getReservedDt(), format))
+                    .reservedDt(formDt)
                     .rating(form.getRating())
                     .build());
 
     //별점을 shop에 업데이트
     double avg = reviewRepository.findAllByShop(shop).stream()
+            .filter(Review::getIsExist)
             .mapToInt(Review::getRating)
             .average()
             .orElse(0);
@@ -149,11 +157,21 @@ public class ReviewService {
     Review review = reviewRepository.findById(id)
             .orElseThrow(()-> new CustomException(NOT_FOUND_REVIEW));
 
+    Shop shop = review.getShop();
     if (!review.getIsExist()){
       throw new CustomException(ALREADY_DELETE_REVIEW);
     }
-
     review.setIsExist(false);
+
+    double avg = reviewRepository.findAllByShop(shop).stream()
+            .filter(Review::getIsExist)
+            .mapToInt(Review::getRating)
+            .average()
+            .orElse(0);
+
+    shop.setRating(Math.round(avg * 10) / 10.0);
+
+
     return ReviewDto.from(review);
   }
 

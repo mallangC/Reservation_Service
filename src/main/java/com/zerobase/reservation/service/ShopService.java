@@ -84,6 +84,10 @@ public class ShopService {
 
     Member member = findMemberById(form.getOwnerId());
 
+    if (!member.getRole().equals("ROLE_MANAGER")) {
+      throw new CustomException(NOT_RIGHT_AUTH);
+    }
+
     Shop shop = Shop.builder()
             .name(form.getName())
             .owner(member)
