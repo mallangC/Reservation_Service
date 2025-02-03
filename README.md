@@ -44,3 +44,6 @@
 7. Mybatis
 8. Spring Doc
 9. Spring Data Envers
+
+## ERD
+![Image](https://github.com/user-attachments/assets/07e38d9c-95a5-426f-9298-0c3c10dffe85)
