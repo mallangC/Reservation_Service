@@ -35,8 +35,11 @@ public class ShopService {
 
   //모든 매장 이름 확인
   public List<String > getAllShops() {
+    //모든 매장 불러오기
     List<Shop> shops = shopRepository.findAll();
     List<String> shopNames = new ArrayList<>();
+
+    //이름만 리스트에 모아서 반환
     for (Shop shop : shops) {
       shopNames.add(shop.getName());
     }
@@ -45,8 +48,11 @@ public class ShopService {
 
   //모든 매장 이름 확인 (가,나,다 정렬)
   public List<String> getAllShopsAsc() {
+    //가,나,다 순으로 정렬해서 모든 매장 불러오기
     List<Shop> shops = shopRepository.findAllByOrderByNameAsc();
     List<String> shopNames = new ArrayList<>();
+
+    //이름만 리스트에 모아서 반환
     for (Shop shop : shops) {
       shopNames.add(shop.getName());
     }
@@ -55,9 +61,12 @@ public class ShopService {
 
   //모든 매장 이름 확인(별점 순)
   public List<String> getAllShopsStarCount() {
+    //모든 매장 불러오기
     List<Shop> shops = shopRepository.findAll();
+    //별점 순으로 정렬
     Collections.sort(shops);
 
+    //이름만 리스트에 모아서 반환
     List<String> shopNames = new ArrayList<>();
     for (Shop shop : shops) {
       shopNames.add(shop.getName());
@@ -67,23 +76,35 @@ public class ShopService {
 
   //모든 매장 이름 확인(거리 순)
   public List<String> getAllShopsDistance(MyLocationForm form) {
-
+    //jpa로 구현하기 어려워 mybatis로 구현
+    //위도, 경도로 거리 계산 후 정렬해서 이름 반환
     return shopMapper.selectListDistance(form);
   }
 
-  //매장 이름으로 매장 디테일 확인
+  //매장 이름으로 매장 검색
   public ShopDto getShop(String shopName){
     return ShopDto.from(findShopByName(shopName));
+  }
+
+  //이름으로 비슷한 이름 검색
+  public List<ShopDto> getShopContains(String shopName){
+    return shopRepository
+            .findAllByNameContains(shopName).stream()
+            .map(ShopDto::from)
+            .toList();
   }
 
   //매장 등록
   @Transactional
   public ShopDto addShop(ShopForm form) {
+    //매장 이름으로 중복되는 매장이 있는지 DB에서 확인
     if (isExist(form.getName())) {
       throw new CustomException(ALREADY_REGISTERED_SHOP);}
 
+    //회원 id로 회원이 있는지 DB에서 확인하면서 회원 객체를 반환
     Member member = findMemberById(form.getOwnerId());
 
+    //회원이 MANAGER 권한을 가지고 있지 않다면 매장 등록 불가
     if (!member.getRole().equals("ROLE_MANAGER")) {
       throw new CustomException(NOT_RIGHT_AUTH);
     }
@@ -98,9 +119,11 @@ public class ShopService {
             .description(form.getDescription())
             .openTime(form.getOpenTime())
             .closeTime(form.getCloseTime())
+            .rating(0d)
             .build();
 
-
+    //요일에 관한 데이터을 따로 테이블을 만들어서 서비스
+    //요일별로 매장 운영시간 설정 대비용
     WorkingDays workingDays = getWorkingDays(form, shop);
     shopRepository.save(shop);
     workingDaysRepository.save(workingDays);
@@ -112,7 +135,10 @@ public class ShopService {
   @Transactional
   public ShopDto deleteShop(String shopName){
 
+    //매장이름으로 DB에서 매장을 찾아 매장 객체로 반환
     Shop shop = findShopByName(shopName);
+
+    //매장과 매장과 연결되어있는 일하는 요일 데이터도 삭제
     shopRepository.delete(shop);
     workingDaysRepository.delete(shop.getWorkingDays());
     return ShopDto.from(shop);
@@ -120,7 +146,7 @@ public class ShopService {
 
   //매장에 별점 확인
   public Double getRating(String shopName){
-
+    //매장이름으로 DB에서 매장을 찾아 매장 객체로 반환
     Shop shop = findShopByName(shopName);
     return shop.getRating();
   }

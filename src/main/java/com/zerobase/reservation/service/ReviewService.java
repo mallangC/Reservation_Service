@@ -84,13 +84,14 @@ public class ReviewService {
 
     if (reviewOp.isPresent()){
       if (!reviewOp.get().getIsExist()){
+        //리뷰를 삭제하면 재작성 불가
         throw new CustomException(UNABLE_REWRITE_REVIEW);
       }else {
+        //리뷰가 이미 있으므로 재작성 불가
         throw new CustomException(ALREADY_WRITE_REVIEW);
       }
     }
 
-    DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH");
 
     Review review = reviewRepository.save(Review.builder()
                     .shop(shop)
@@ -101,13 +102,14 @@ public class ReviewService {
                     .rating(form.getRating())
                     .build());
 
-    //별점을 shop에 업데이트
+    //매장 이름으로 모든 별점을 가지고와서 평균내기
     double avg = reviewRepository.findAllByShop(shop).stream()
             .filter(Review::getIsExist)
             .mapToInt(Review::getRating)
             .average()
             .orElse(0);
 
+    //평균 별점을 소수점 1자리 까지만 shop에 업데이트
     shop.setRating(Math.round(avg * 10) / 10.0);
 
     return ReviewDto.from(review);
@@ -119,6 +121,7 @@ public class ReviewService {
     Shop shop = shopRepository.findByName(shopName)
             .orElseThrow(()->new CustomException(NOT_FOUND_SHOP));
 
+    //매장의 삭제(숨김)되지 않은 리뷰를 모두 반환
     return reviewRepository.findAllByShopAndIsExist(shop, true)
             .stream()
             .map(ReviewDto::from)
@@ -131,6 +134,7 @@ public class ReviewService {
     Member member = memberRepository.findById(memberId)
             .orElseThrow(()->new CustomException(NOT_FOUND_MEMBER));
 
+    //회원의 삭제(숨김)되지 않은 리뷰를 모두 반환
     return reviewRepository.findAllByMemberAndIsExist(member, true)
             .stream()
             .map(ReviewDto::from)
@@ -140,29 +144,37 @@ public class ReviewService {
   //리뷰 수정
   @Transactional
   public ReviewDto updateReview(ReviewUpdateForm form) {
-    Member member = memberRepository.findById(form.getMemberId())
+
+    //아이디로 회원 찾기
+    memberRepository.findById(form.getMemberId())
             .orElseThrow(()-> new CustomException(NOT_FOUND_MEMBER));
 
+    //아이디 리뷰 찾기
     Review review = reviewRepository.findById(form.getId())
             .orElseThrow(()-> new CustomException(NOT_FOUND_REVIEW));
 
+    //리뷰 수정
     review.setContents(form.getContents());
-
     return ReviewDto.from(review);
   }
 
   //리뷰 삭제
   @Transactional
   public ReviewDto deleteReview(Long id) {
+    //아이디로 리뷰 찾기
     Review review = reviewRepository.findById(id)
             .orElseThrow(()-> new CustomException(NOT_FOUND_REVIEW));
 
-    Shop shop = review.getShop();
+    //리뷰가 이미 삭제처리 됐는지 확인
     if (!review.getIsExist()){
       throw new CustomException(ALREADY_DELETE_REVIEW);
     }
+
+    //리뷰 삭제(숨김)처리
     review.setIsExist(false);
 
+    //평균 별점 업데이트
+    Shop shop = review.getShop();
     double avg = reviewRepository.findAllByShop(shop).stream()
             .filter(Review::getIsExist)
             .mapToInt(Review::getRating)
@@ -170,7 +182,6 @@ public class ReviewService {
             .orElse(0);
 
     shop.setRating(Math.round(avg * 10) / 10.0);
-
 
     return ReviewDto.from(review);
   }

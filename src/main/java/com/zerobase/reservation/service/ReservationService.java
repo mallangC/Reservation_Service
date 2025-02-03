@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -38,7 +37,7 @@ public class ReservationService {
 
     String formDt = form.getReservationDt();
 
-    //매장, 회원 존재여부
+    //매장, 회원 확인
     Shop shopToReserve = shopRepository.findByName(form.getShopName())
             .orElseThrow(()-> new CustomException(NOT_FOUND_SHOP));
     Member memberReserve = memberRepository.findById(form.getMemberId())
@@ -59,17 +58,18 @@ public class ReservationService {
       throw new CustomException(NOT_TIME_SHOP_OPEN);
     }
 
+    //년,월,일 까지만 따로 저장해 오늘 예약 확인
     String StartingWithDt = formDt.split(" ")[0];
 
     //이미 예약이 있는지 확인
     boolean alreadyReserved =
             reservationRepository.existsByMemberAndShopAndReservationDtStartingWith(
                     memberReserve, shopToReserve, StartingWithDt);
-
     if (alreadyReserved){
       throw new CustomException(ALREADY_RESERVED_TODAY);
     }
 
+    //매장의 일하는 요일 데이터를 문자열 리스트로 변환
     List<String> shopWorkingDays = WorkingDaysDto.from(shopToReserve.getWorkingDays());
     String reserveDay = reservationDt.getDayOfWeek().toString();
 
@@ -103,11 +103,12 @@ public class ReservationService {
   @Transactional
   public ReservationDto cancelReservation(Long reservationId) {
 
+    //아이디로 매장 확인
     Reservation reservation = reservationRepository.findById(reservationId)
                     .orElseThrow(()-> new CustomException(NOT_FOUND_RESERVATION));
 
+    //매장 삭제
     reservationRepository.deleteById(reservationId);
-
     return ReservationDto.from(reservation);
   }
 
@@ -122,6 +123,8 @@ public class ReservationService {
     if (reservation.getIsApproved() == null || !reservation.getIsApproved()){
       throw new CustomException(NOT_APPROVED_RESERVATION);
     }
+
+    //시간 날짜, 시간, 요일 확인을 위해 문자열을 LocalDateTime으로 변환
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH");
     LocalDateTime reservationDt = LocalDateTime.parse(reservation.getReservationDt(), formatter);
 
@@ -142,6 +145,7 @@ public class ReservationService {
       throw new CustomException(ALREADY_ARRIVED_RESERVATION);
     }
 
+    //도착 확인
     reservation.setIsArrived(true);
     return ReservationDto.from(reservation);
   }
@@ -150,8 +154,10 @@ public class ReservationService {
   @Transactional
   public ReservationDto updateReservationApproved(ReservationVerifyForm form) {
 
+    //회원, 예약 확인
     Reservation reservation = validMemberAndReserved(form);
 
+    //예약 승인 처리
     reservation.setIsApproved(form.getIsApprove().equals("true"));
 
     return ReservationDto.from(reservation);

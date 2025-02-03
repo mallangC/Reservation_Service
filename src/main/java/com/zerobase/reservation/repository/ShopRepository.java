@@ -15,4 +15,6 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
   List<Shop> findAllByOrderByNameAsc();
 
   boolean existsByName(String name);
+
+  List<Shop> findAllByNameContains( String name);
 }
