@@ -36,7 +36,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3QxMEBnbWFpbC5jb20iL
 
 
 ### 매장 검색 (비슷한 이름 모두 검색)
-GET http://localhost:8080/shop/search?name=다
+GET http://localhost:8080/shop/search?keyword=우
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwicm9sZSI6IlJPTEVfTUVNQkVSIiwiaWF0IjoxNzM4NTQyMjcyLCJleHAiOjE3MzkxNDcwNzJ9.A_L3Y1lmbrhA-y-350WGLQEOZgmxd0VPKa11qjon6tA
 
