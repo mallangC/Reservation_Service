@@ -1,6 +1,7 @@
 package com.zerobase.reservation.repository;
 
 import com.zerobase.reservation.model.Shop;
+import org.checkerframework.common.aliasing.qual.Unique;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +18,6 @@ public interface ShopRepository extends JpaRepository<Shop, Long> {
   boolean existsByName(String name);
 
   List<Shop> findAllByNameContains( String name);
+
+  List<Shop> findAllByNameContainsOrDescriptionContains( String name, String description);
 }

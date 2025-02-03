@@ -86,10 +86,10 @@ public class ShopService {
     return ShopDto.from(findShopByName(shopName));
   }
 
-  //이름으로 비슷한 이름 검색
-  public List<ShopDto> getShopContains(String shopName){
+  //키워드로 검색
+  public List<ShopDto> getShopContains(String keyword){
     return shopRepository
-            .findAllByNameContains(shopName).stream()
+            .findAllByNameContainsOrDescriptionContains(keyword, keyword).stream()
             .map(ShopDto::from)
             .toList();
   }
